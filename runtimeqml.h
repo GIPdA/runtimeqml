@@ -29,6 +29,7 @@ public:
 
     QList<QString> const & prefixIgnoreList() const;
     QList<QString> const & fileIgnoreList() const;
+    QList<QString> const & allowedSuffixes() const;
 
 signals:
     void autoReloadChanged(bool autoReload);
@@ -45,6 +46,8 @@ public slots:
 
     void ignorePrefix(QString const& prefix);
     void ignoreFile(QString const& filename);
+
+    void addSuffix(QString const& suffix);
 
 private slots:
     void reloadQml();
@@ -65,6 +68,7 @@ private:
     QFileSystemWatcher* m_fileWatcher {nullptr};
     QList<QString> m_prefixIgnoreList;
     QList<QString> m_fileIgnoreList;
+    QList<QString> m_allowedSuffixList;
 };
 
 #endif // RUNTIMEQML_H

@@ -10,6 +10,7 @@ RuntimeQML::RuntimeQML(QQmlApplicationEngine* engine, const QString &qrcFilename
     m_qrcFilename(qrcFilename),
     m_mainQmlFilename("main.qml")
 {
+    m_allowedSuffixList << "qml";
 }
 
 
@@ -43,6 +44,10 @@ const QList<QString> &RuntimeQML::fileIgnoreList() const
     return m_fileIgnoreList;
 }
 
+const QList<QString> &RuntimeQML::allowedSuffixes() const
+{
+    return m_allowedSuffixList;
+}
 
 void RuntimeQML::reload()
 {
@@ -98,7 +103,7 @@ void RuntimeQML::ignorePrefix(const QString& prefix)
 
     m_prefixIgnoreList.append(prefix);
 
-    qDebug() << "Ignoring prefix:" << prefix;
+    //qDebug() << "Ignoring prefix:" << prefix;
 
     if (m_autoReload) {
         loadQrcFiles();
@@ -111,7 +116,20 @@ void RuntimeQML::ignoreFile(const QString &filename)
 
     m_fileIgnoreList.append(filename);
 
-    qDebug() << "Ignoring file:" << filename;
+    //qDebug() << "Ignoring file:" << filename;
+
+    if (m_autoReload) {
+        loadQrcFiles();
+    }
+}
+
+void RuntimeQML::addSuffix(const QString &suffix)
+{
+    if (m_allowedSuffixList.contains(suffix)) return;
+
+    m_allowedSuffixList.append(suffix);
+
+    //qDebug() << "Allowing file suffix:" << suffix;
 
     if (m_autoReload) {
         loadQrcFiles();
@@ -164,7 +182,7 @@ void RuntimeQML::loadQrcFiles()
 
     QFile file(m_qrcFilename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qDebug() << "Unable to open resource file, RuntimeQML will not work! Error:" << file.errorString();
+        qWarning("Unable to open resource file, RuntimeQML will not work! Error: %s", qPrintable(file.errorString()));
         return;
     }
 
@@ -203,8 +221,8 @@ void RuntimeQML::loadQrcFiles()
 
                 QFileInfo const file { filename };
 
-                // If qml file, add to the watch list
-                if (file.suffix() == "qml") {
+                // Add to the watch list if the file suffix is allowed
+                if (m_allowedSuffixList.contains(file.suffix())) {
                     QString fp { m_selector.select(basePath + filename) };
                     m_fileWatcher->addPath(fp);
                     //qDebug() << "    " << file.absoluteFilePath() << fp;
