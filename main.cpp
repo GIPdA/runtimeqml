@@ -5,8 +5,6 @@
 
 #include "runtimeqml.h"
 
-#define _STR(x) #x
-#define STR(X)  _STR(x)
 
 int main(int argc, char *argv[])
 {
@@ -26,11 +24,11 @@ int main(int argc, char *argv[])
     //rt->ignoreFile("Page2.qml");
     rt->setAutoReload(true);
 
-    //rt->setMainQmlFilename("main.qml");
+    //rt->setMainQmlFilename("main.qml"); // Default is "main.qml"
 
     engine.rootContext()->setContextProperty("RuntimeQML", rt);
 
-    //engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+    //engine.load(QUrl(QLatin1String("qrc:/main.qml"))); // Replaced by rt->reload()
     rt->reload();
 
     return app.exec();
