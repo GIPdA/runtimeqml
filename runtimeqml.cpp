@@ -202,6 +202,7 @@ void RuntimeQML::loadQrcFiles()
                     if (m_prefixIgnoreList.contains(p)) {
                         // Ignore this prefix, loop through elements in this 'qresource' tag
                         while (!inputStream.atEnd() && !inputStream.hasError()) {
+                            inputStream.readNext();
                             if (inputStream.isEndElement() && inputStream.name() == "qresource")
                                 break;
                         }
