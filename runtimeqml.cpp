@@ -49,6 +49,13 @@ const QList<QString> &RuntimeQML::allowedSuffixes() const
     return m_allowedSuffixList;
 }
 
+void RuntimeQML::noDebug()
+{
+    if (m_noDebug) return;
+    m_noDebug = true;
+}
+
+
 void RuntimeQML::reload()
 {
     QMetaObject::invokeMethod(this, "reloadQml", Qt::QueuedConnection);
@@ -232,16 +239,18 @@ void RuntimeQML::loadQrcFiles()
         }
     }
 
-    qDebug("Watching QML files:");
-    int const fileCount = m_fileWatcher->files().size();
-    for (auto &f : m_fileWatcher->files()) {
-        qDebug() << "    " << f;
-    }
+    if (!m_noDebug) {
+        qDebug("Watching QML files:");
+        int const fileCount = m_fileWatcher->files().size();
+        for (auto &f : m_fileWatcher->files()) {
+            qDebug() << "    " << f;
+        }
 
-    if (fileCount > 0) {
-        qDebug("  Total: %d", fileCount);
-    } else {
-        qDebug("  None.");
+        if (fileCount > 0) {
+            qDebug("  Total: %d", fileCount);
+        } else {
+            qDebug("  None.");
+        }
     }
 }
 

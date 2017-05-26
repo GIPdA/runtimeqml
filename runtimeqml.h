@@ -31,6 +31,8 @@ public:
     QList<QString> const & fileIgnoreList() const;
     QList<QString> const & allowedSuffixes() const;
 
+    void noDebug();
+
 signals:
     void autoReloadChanged(bool autoReload);
     void qrcFilenameChanged(QString qrcFilename);
@@ -69,6 +71,7 @@ private:
     QList<QString> m_prefixIgnoreList;
     QList<QString> m_fileIgnoreList;
     QList<QString> m_allowedSuffixList;
+    bool m_noDebug {false};
 };
 
 #endif // RUNTIMEQML_H
