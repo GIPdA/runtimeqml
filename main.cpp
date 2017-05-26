@@ -13,8 +13,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
-    qDebug() << "Project path:" << RUNTIMEQML_PATH;
-
 //    QDirIterator it(":", QDirIterator::Subdirectories);
 //    while (it.hasNext()) {
 //        qDebug() << it.next();
@@ -22,7 +20,10 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
     RuntimeQML *rt = new RuntimeQML(&engine, "/Volumes/SafeDisk/Projects/Qt/RuntimeQML/qml.qrc");
-    //rt->ignorePrefix(":/pages");
+    //rt->noDebug();
+    //rt->addSuffix("conf");
+    //rt->ignorePrefix("/test");
+    //rt->ignoreFile("Page2.qml");
     rt->setAutoReload(true);
 
     //rt->setMainQmlFilename("main.qml");
