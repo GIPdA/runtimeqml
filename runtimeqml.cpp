@@ -1,7 +1,7 @@
 #include "runtimeqml.h"
 
 #include <QXmlStreamReader>
-#include <QDirIterator>
+#include <QFileInfo>
 
 /*!
  * \brief Construct a RuntimeQML object with a path to the qrc file.
