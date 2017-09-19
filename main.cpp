@@ -26,6 +26,7 @@ int main(int argc, char *argv[])
     //rt->ignorePrefix("/test");
     //rt->ignoreFile("Page2.qml");
     rt->setAutoReload(true);
+    //rt->setCloseAllOnReload(false);
 
     //rt->setMainQmlFilename("main.qml"); // Default is "main.qml"
 

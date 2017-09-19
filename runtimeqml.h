@@ -15,6 +15,7 @@ class RuntimeQML : public QObject
     Q_OBJECT
     Q_PROPERTY(QString qrcFilename READ qrcFilename WRITE setQrcFilename NOTIFY qrcFilenameChanged)
     Q_PROPERTY(bool autoReload READ autoReload WRITE setAutoReload NOTIFY autoReloadChanged)
+    Q_PROPERTY(bool closeAllOnReload READ closeAllOnReload WRITE setCloseAllOnReload NOTIFY closeAllOnReloadChanged)
 
 public:
     explicit RuntimeQML(QQmlApplicationEngine *engine, QString const& qrcFilename = QString(), QObject *parent = 0);
@@ -26,6 +27,7 @@ public:
     QString qrcFilename() const;
 
     bool autoReload() const;
+    bool closeAllOnReload() const;
 
     QList<QString> const & prefixIgnoreList() const;
     QList<QString> const & fileIgnoreList() const;
@@ -36,6 +38,7 @@ public:
 signals:
     void autoReloadChanged(bool autoReload);
     void qrcFilenameChanged(QString qrcFilename);
+    void closeAllOnReloadChanged(bool closeAllOnReload);
 
 public slots:
     void reload();
@@ -45,6 +48,7 @@ public slots:
     void setMainQmlFilename(QString filename);
 
     void setAutoReload(bool autoReload);
+    void setCloseAllOnReload(bool closeAllOnReload);
 
     void ignorePrefix(QString const& prefix);
     void ignoreFile(QString const& filename);
@@ -72,6 +76,7 @@ private:
     QList<QString> m_fileIgnoreList;
     QList<QString> m_allowedSuffixList;
     bool m_noDebug {false};
+    bool m_closeAllOnReload {true};
 };
 
 #endif // RUNTIMEQML_H

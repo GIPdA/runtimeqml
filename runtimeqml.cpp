@@ -55,6 +55,15 @@ bool RuntimeQML::autoReload() const
 }
 
 /*!
+ * \brief If true, all open windows will be closed upon reload.
+ * \default true
+ */
+bool RuntimeQML::closeAllOnReload() const
+{
+    return m_closeAllOnReload;
+}
+
+/*!
  * \brief QRC prefixes that are ignored.
  */
 const QList<QString>& RuntimeQML::prefixIgnoreList() const
@@ -142,7 +151,7 @@ void RuntimeQML::setMainQmlFilename(QString filename)
 /*!
  * \brief If true, files are watched for changes and auto-reloaded.
  * Otherwise, you need to trigger a reload manually from your code by calling reload().
- * \sa reload True to auto-reload, false otherwise.
+ * \param reload True to auto-reload, false otherwise.
  */
 void RuntimeQML::setAutoReload(bool autoReload)
 {
@@ -157,6 +166,19 @@ void RuntimeQML::setAutoReload(bool autoReload)
     } else {
         unloadFileWatcher();
     }
+}
+
+/*!
+ * \brief If true, all open windows are closed upon reload. Otherwise, might cause "link" errors with QML components.
+ * \param closeAllOnReload True to close all windows on reload, false otherwise.
+ */
+void RuntimeQML::setCloseAllOnReload(bool closeAllOnReload)
+{
+    if (m_closeAllOnReload == closeAllOnReload)
+        return;
+
+    m_closeAllOnReload = closeAllOnReload;
+    emit closeAllOnReloadChanged(m_closeAllOnReload);
 }
 
 /*!
@@ -225,6 +247,15 @@ void RuntimeQML::reloadQml()
     }
 
     if (m_window) {
+        if (m_closeAllOnReload) {
+            // Find all child windows and close them
+            auto allWindows = m_window->findChildren<QQuickWindow*>();
+            for (int i = 0; i < allWindows.size(); ++i) {
+                QQuickWindow* w = qobject_cast<QQuickWindow*>(allWindows.at(i));
+                if (w) w->close();
+            }
+        }
+
         m_window->close();
     }
 
