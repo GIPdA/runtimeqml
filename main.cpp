@@ -5,6 +5,9 @@
 
 #include "runtimeqml.h"
 
+#define STRINGIFY(x) #x
+#define TOSTRING(x) STRINGIFY(x)
+
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +20,7 @@ int main(int argc, char *argv[])
 //    }
 
     QQmlApplicationEngine engine;
-    RuntimeQML *rt = new RuntimeQML(&engine, "/Volumes/SafeDisk/Projects/Qt/RuntimeQML/qml.qrc");
+    RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(SOURCE_PATH) "/qml.qrc"); // SOURCE_PATH is defined in the .pro to $$PWD
     //rt->noDebug();
     //rt->addSuffix("conf");
     //rt->ignorePrefix("/test");
