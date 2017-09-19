@@ -14,10 +14,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
-//    QDirIterator it(":", QDirIterator::Subdirectories);
-//    while (it.hasNext()) {
-//        qDebug() << it.next();
-//    }
 
     QQmlApplicationEngine engine;
     RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(SOURCE_PATH) "/qml.qrc"); // SOURCE_PATH is defined in the .pro to $$PWD

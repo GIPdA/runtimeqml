@@ -249,8 +249,8 @@ void RuntimeQML::reloadQml()
     if (m_window) {
         if (m_closeAllOnReload) {
             // Find all child windows and close them
-            auto allWindows = m_window->findChildren<QQuickWindow*>();
-            for (int i = 0; i < allWindows.size(); ++i) {
+            auto const allWindows = m_window->findChildren<QQuickWindow*>();
+            for (int i {0}; i < allWindows.size(); ++i) {
                 QQuickWindow* w = qobject_cast<QQuickWindow*>(allWindows.at(i));
                 if (w) w->close();
             }
@@ -266,7 +266,6 @@ void RuntimeQML::reloadQml()
     if (!m_engine->rootObjects().isEmpty()) {
         QQuickWindow* w = qobject_cast<QQuickWindow*>(m_engine->rootObjects().last());
         if (w) m_window = w;
-        //qDebug() << m_window << w->parent();
     }
 
 //    for (auto *o : m_engine->rootObjects()) {
