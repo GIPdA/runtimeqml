@@ -8,6 +8,6 @@
         <file>pages/Page3.qml</file>
     </qresource>
     <qresource prefix="/test">
-        <file>Page4.qml</file>
+        <file alias="page4">Page4.qml</file>
     </qresource>
 </RCC>
