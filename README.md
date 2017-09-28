@@ -16,6 +16,13 @@ On reload, all windows are closed, and the main window is reloaded. All "QML-onl
 It only works with Window component as top object, or QQuickWindow subclasses.
 
 
+## How to use it in your project
+
+Copy the ```runtimeqml``` folder into your project and import the ```.pri``` project file into your ```.pro``` file:
+
+	include(runtimeqml/runtimeqml.pri)
+
+
 ## Usage
 
 Include ```runtimeqml.h``` header file, and create the RuntimeQML object (after the QML engine) :
@@ -64,10 +71,6 @@ Trigger the reload when and where you want, like with a button:
 
 You can do it in C++ too, of course.
 
-
-## How to use it in your project
-
-Just add the ```runtimeqml.h``` and ```runtimeqml.cpp``` files to your project, and maybe the ```SOURCE_PATH``` define in the .pro, then do as explained in "Usage" section above!
 
 
 ## License
