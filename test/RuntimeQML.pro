@@ -2,7 +2,7 @@ QT += qml quick
 
 CONFIG += c++11
 
-include(runtimeqml/runtimeqml.pri)
+include(../runtimeqml/runtimeqml.pri)
 
 SOURCES += main.cpp
 
@@ -21,6 +21,7 @@ QML_DESIGNER_IMPORT_PATH =
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+DEFINES += QRC_RUNTIME_SOURCE_PATH=$$PWD
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.

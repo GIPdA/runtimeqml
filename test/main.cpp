@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-    RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(QRC_SOURCE_PATH) "/qml.qrc"); // SOURCE_PATH is defined in the .pro to $$PWD
+    // QRC_RUNTIME_SOURCE_PATH is defined in the .pro to $$PWD
+    // In other projects where runtimeqml is on the same level of the .pro, you can use QRC_SOURCE_PATH (defined in runtimeqml.pri)
+    RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(QRC_RUNTIME_SOURCE_PATH) "/qml.qrc");
     //rt->noDebug();
     //rt->addSuffix("conf");
     //rt->ignorePrefix("/test");

@@ -18,7 +18,7 @@ It only works with Window component as top object, or QQuickWindow subclasses.
 
 ## How to use it in your project
 
-Copy the ```runtimeqml``` folder into your project and import the ```.pri``` project file into your ```.pro``` file:
+Clone the repo into your project (or copy-paste the ```runtimeqml``` folder) and import the ```.pri``` project file into your ```.pro``` file:
 
 	include(runtimeqml/runtimeqml.pri)
 
@@ -27,10 +27,10 @@ Copy the ```runtimeqml``` folder into your project and import the ```.pri``` pro
 
 Include ```runtimeqml.h``` header file, and create the RuntimeQML object (after the QML engine) :
 
-	RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(SOURCE_PATH) "/qml.qrc");
+	RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(QRC_SOURCE_PATH) "/qml.qrc");
 
 The second argument is the path to your qrc file listing all your QML files, needed for the auto-reload feature only. You can omit it if you don't want auto-reload.
-```SOURCE_PATH``` is defined in the .pro file to the .pro path, just to not have to manually set an absolute path...
+```QRC_SOURCE_PATH``` is defined in the ```.pri``` file to its parent path, just to not have to manually set an absolute path...
 
 
 Set the "options" you want, or not:
@@ -52,6 +52,9 @@ Then load the main QML file :
 	rt->reload();
     
 And you're all set!
+
+
+You can also check the test project. Beware, includes and defines differs a bit...
 
 
 ## Manual reload
