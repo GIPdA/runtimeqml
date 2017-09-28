@@ -2,7 +2,7 @@ QT += qml quick
 
 CONFIG += c++11
 
-include(../runtimeqml/runtimeqml.pri)
+include(../runtimeqml.pri)
 
 SOURCES += main.cpp
 
