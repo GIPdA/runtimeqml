@@ -252,11 +252,15 @@ void RuntimeQML::reloadQml()
             auto const allWindows = m_window->findChildren<QQuickWindow*>();
             for (int i {0}; i < allWindows.size(); ++i) {
                 QQuickWindow* w = qobject_cast<QQuickWindow*>(allWindows.at(i));
-                if (w) w->close();
+                if (w) {
+                    w->close();
+                    w->deleteLater();
+                }
             }
         }
 
         m_window->close();
+        m_window->deleteLater();
     }
 
     m_engine->clearComponentCache();
