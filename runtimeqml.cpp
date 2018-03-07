@@ -264,8 +264,10 @@ void RuntimeQML::reloadQml()
     }
 
     m_engine->clearComponentCache();
-    m_engine->load(QUrl(m_selector.select(qrcAbsolutePath() + "/" + m_mainQmlFilename)));
-    // TODO: QQmlApplicationEngine::rootObjects() isn't cleared, should it be?
+    // TODO: test with network files
+    // TODO: QString path to QUrl doesn't work under Windows with load() (load fail)
+    m_engine->load(m_selector.select(qrcAbsolutePath() + "/" + m_mainQmlFilename));
+    // NOTE: QQmlApplicationEngine::rootObjects() isn't cleared, should it be?
 
     if (!m_engine->rootObjects().isEmpty()) {
         QQuickWindow* w = qobject_cast<QQuickWindow*>(m_engine->rootObjects().last());
