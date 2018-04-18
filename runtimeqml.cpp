@@ -2,6 +2,7 @@
 
 #include <QXmlStreamReader>
 #include <QFileInfo>
+#include <QRegExp>
 
 /*!
  * \brief Construct a RuntimeQML object with a path to the qrc file.
@@ -200,17 +201,17 @@ void RuntimeQML::ignoreQrcPrefix(const QString& prefix)
 }
 
 /*!
- * \brief Add a filename to ignore from changes. Applies to the full filename in the QRC.
- * Relevant for auto-reload only.
- * \param filename File name to ignore.
+ * \brief Add a filename to ignore from changes.
+ * Applies to the full filename in the QRC entry (i.e. the local "path"), with the prefix.
+ * Supports "file globbing" matching using wildcards.
+ * \note Relevant for auto-reload only.
+ * \param filename Filename to ignore.
  */
 void RuntimeQML::ignoreFile(const QString &filename)
 {
     if (m_fileIgnoreList.contains(filename)) return;
 
     m_fileIgnoreList.append(filename);
-
-    //qDebug() << "Ignoring file:" << filename;
 
     if (m_autoReload) {
         loadQrcFiles();
@@ -308,6 +309,7 @@ void RuntimeQML::loadQrcFiles()
     }
 
     QString const basePath = qrcAbsolutePath() + "/";
+    QString currentPrefix;
 
     // Read each entry
     QXmlStreamReader inputStream(&file);
@@ -329,6 +331,7 @@ void RuntimeQML::loadQrcFiles()
                         }
                         continue;
                     }
+                    currentPrefix = p;
                 }
             }
 
@@ -337,9 +340,14 @@ void RuntimeQML::loadQrcFiles()
                 QString const filename { inputStream.readElementText() };
 
                 // Check ignore list
-                if (m_fileIgnoreList.contains(filename)) {
+                auto it = std::find_if(m_fileIgnoreList.cbegin(), m_fileIgnoreList.cend(), [&](QString const& pattern) {
+                    QRegExp re(pattern);
+                    re.setPatternSyntax(QRegExp::WildcardUnix);
+                    return re.exactMatch(currentPrefix + filename);
+                });
+
+                if (it != m_fileIgnoreList.cend())
                     continue;
-                }
 
                 QFileInfo const file { filename };
 
