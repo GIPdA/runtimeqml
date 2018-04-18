@@ -183,10 +183,10 @@ void RuntimeQML::setCloseAllOnReload(bool closeAllOnReload)
 
 /*!
  * \brief Add a QRC prefix to ignore.
- * Relevant for auto-reload only.
+ * \note Relevant for auto-reload only.
  * \param prefix Prefix to ignore.
  */
-void RuntimeQML::ignorePrefix(const QString& prefix)
+void RuntimeQML::ignoreQrcPrefix(const QString& prefix)
 {
     if (m_prefixIgnoreList.contains(prefix)) return;
 

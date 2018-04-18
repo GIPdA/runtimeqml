@@ -50,7 +50,7 @@ public slots:
     void setAutoReload(bool autoReload);
     void setCloseAllOnReload(bool closeAllOnReload);
 
-    void ignorePrefix(QString const& prefix);
+    void ignoreQrcPrefix(QString const& prefix);
     void ignoreFile(QString const& filename);
 
     void addSuffix(QString const& suffix);
