@@ -94,7 +94,8 @@ const QList<QString> &RuntimeQML::allowedSuffixes() const
  */
 void RuntimeQML::noDebug()
 {
-    if (m_noDebug) return;
+    if (m_noDebug)
+        return;
     m_noDebug = true;
 }
 
@@ -115,7 +116,8 @@ void RuntimeQML::reload()
  */
 void RuntimeQML::setWindow(QQuickWindow* window)
 {
-    if (window == m_window) return;
+    if (window == m_window)
+        return;
     m_window = window;
 }
 
@@ -162,11 +164,10 @@ void RuntimeQML::setAutoReload(bool autoReload)
     m_autoReload = autoReload;
     emit autoReloadChanged(autoReload);
 
-    if (autoReload) {
+    if (autoReload)
         loadQrcFiles();
-    } else {
+    else
         unloadFileWatcher();
-    }
 }
 
 /*!
@@ -189,15 +190,13 @@ void RuntimeQML::setCloseAllOnReload(bool closeAllOnReload)
  */
 void RuntimeQML::ignoreQrcPrefix(const QString& prefix)
 {
-    if (m_prefixIgnoreList.contains(prefix)) return;
+    if (m_prefixIgnoreList.contains(prefix))
+        return;
 
     m_prefixIgnoreList.append(prefix);
 
-    //qDebug() << "Ignoring prefix:" << prefix;
-
-    if (m_autoReload) {
+    if (m_autoReload)
         loadQrcFiles();
-    }
 }
 
 /*!
@@ -209,31 +208,29 @@ void RuntimeQML::ignoreQrcPrefix(const QString& prefix)
  */
 void RuntimeQML::ignoreFile(const QString &filename)
 {
-    if (m_fileIgnoreList.contains(filename)) return;
+    if (m_fileIgnoreList.contains(filename))
+        return;
 
     m_fileIgnoreList.append(filename);
 
-    if (m_autoReload) {
+    if (m_autoReload)
         loadQrcFiles();
-    }
 }
 
 /*!
  * \brief Allow a file suffix to be watched for changes.
- * Relevant for auto-reload only.
+ * \note Relevant for auto-reload only.
  * \param suffix
  */
 void RuntimeQML::addSuffix(const QString &suffix)
 {
-    if (m_allowedSuffixList.contains(suffix)) return;
+    if (m_allowedSuffixList.contains(suffix))
+        return;
 
     m_allowedSuffixList.append(suffix);
 
-    //qDebug() << "Allowing file suffix:" << suffix;
-
-    if (m_autoReload) {
+    if (m_autoReload)
         loadQrcFiles();
-    }
 }
 
 
@@ -364,15 +361,15 @@ void RuntimeQML::loadQrcFiles()
     if (!m_noDebug) {
         qDebug("Watching QML files:");
         int const fileCount = m_fileWatcher->files().size();
+
         for (auto &f : m_fileWatcher->files()) {
             qDebug() << "    " << f;
         }
 
-        if (fileCount > 0) {
+        if (fileCount > 0)
             qDebug("  Total: %d", fileCount);
-        } else {
+        else
             qDebug("  None.");
-        }
     }
 }
 
