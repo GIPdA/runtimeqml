@@ -44,7 +44,7 @@ For the auto-reload feature:
 
 	rt->addSuffix("conf"); // Adds a file suffix to the "white list" for watched files. "qml" is already in.
     rt->ignorePrefix("/test"); // Ignore a prefix in the QRC file.
-    rt->ignoreFile("Page2.qml"); // Ignore a file name (you can add a path to filter more)
+    rt->ignoreFile("/Page2.qml"); // Ignore a file name with prefix (supports classic wildcard matching)
 
 
 Then load the main QML file :
