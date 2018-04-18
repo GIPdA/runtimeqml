@@ -337,10 +337,11 @@ void RuntimeQML::loadQrcFiles()
                 QString const filename { inputStream.readElementText() };
 
                 // Check ignore list
+                QString const fullFilename { currentPrefix + filename };
                 auto it = std::find_if(m_fileIgnoreList.cbegin(), m_fileIgnoreList.cend(), [&](QString const& pattern) {
                     QRegExp re(pattern);
                     re.setPatternSyntax(QRegExp::WildcardUnix);
-                    return re.exactMatch(currentPrefix + filename);
+                    return re.exactMatch(fullFilename);
                 });
 
                 if (it != m_fileIgnoreList.cend())
