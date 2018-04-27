@@ -301,7 +301,8 @@ void RuntimeQML::loadQrcFiles()
 
     QFile file(m_qrcFilename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning("Unable to open resource file, RuntimeQML will not work! Error: %s", qPrintable(file.errorString()));
+        qWarning("Unable to open resource file '%s', RuntimeQML will not work! Error: %s",
+                 qPrintable(m_qrcFilename), qPrintable(file.errorString()));
         return;
     }
 
