@@ -15,6 +15,9 @@ On reload, all windows are closed, and the main window is reloaded. All "QML-onl
 
 It only works with Window component as top object, or QQuickWindow subclasses.
 
+### Examples
+Example project is located here: https://github.com/GIPdA/runtimeqml_examples
+
 
 ## How to use it in your project
 
