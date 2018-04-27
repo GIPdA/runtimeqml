@@ -4,7 +4,7 @@ QT += core qml quick
 
 INCLUDEPATH += $$PWD
 
-DEFINES += QRC_SOURCE_PATH=\"$$PWD/..\"
+DEFINES += "QRC_SOURCE_PATH=\\\"$$PWD/..\\\""
 
 SOURCES += \
     $$PWD/runtimeqml.cpp

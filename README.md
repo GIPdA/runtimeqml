@@ -23,14 +23,18 @@ Clone the repo into your project (or copy-paste the ```runtimeqml``` folder) and
 	include(runtimeqml/runtimeqml.pri)
 
 
+### With Qbs
+The Qbs project file includes RuntimeQML as a static library. Check the example project to see how to include it in your project.
+
+
 ## Usage
 
 Include ```runtimeqml.h``` header file, and create the RuntimeQML object (after the QML engine) :
 
-	RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(QRC_SOURCE_PATH) "/qml.qrc");
+	RuntimeQML *rt = new RuntimeQML(&engine, QRC_SOURCE_PATH"/qml.qrc");
 
 The second argument is the path to your qrc file listing all your QML files, needed for the auto-reload feature only. You can omit it if you don't want auto-reload.
-```QRC_SOURCE_PATH``` is defined in the ```.pri``` file to its parent path, just to not have to manually set an absolute path...
+```QRC_SOURCE_PATH``` is defined in the ```.pri/.qbs``` file to its parent path, just to not have to manually set an absolute path...
 
 
 Set the "options" you want, or not:

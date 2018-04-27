@@ -1,13 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include <QDirIterator>
 
 #include "runtimeqml.h"
-
-#define STRINGIFY(x) #x
-#define TOSTRING(x) STRINGIFY(x)
-
 
 int main(int argc, char *argv[])
 {
@@ -16,9 +11,11 @@ int main(int argc, char *argv[])
 
 
     QQmlApplicationEngine engine;
-    // QRC_RUNTIME_SOURCE_PATH is defined in the .pro to $$PWD
-    // In other projects where runtimeqml is on the same level of the .pro, you can use QRC_SOURCE_PATH (defined in runtimeqml.pri)
-    RuntimeQML *rt = new RuntimeQML(&engine, TOSTRING(QRC_RUNTIME_SOURCE_PATH) "/qml.qrc");
+
+    // QRC_RUNTIME_SOURCE_PATH is defined in the .pro/.qbs of this example to $$PWD
+    // In other projects where runtimeqml folder is on the same level of the .pro, you can use QRC_SOURCE_PATH (defined in runtimeqml.pri/qbs)
+    RuntimeQML *rt = new RuntimeQML(&engine, QRC_RUNTIME_SOURCE_PATH "/qml.qrc");
+
     //rt->noDebug();
     //rt->addSuffix("conf");
     //rt->ignorePrefix("/test");
