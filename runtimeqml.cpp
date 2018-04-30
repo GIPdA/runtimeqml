@@ -3,6 +3,7 @@
 #include <QXmlStreamReader>
 #include <QFileInfo>
 #include <QRegExp>
+#include <QTimer>
 
 /*!
  * \brief Construct a RuntimeQML object with a path to the qrc file.
@@ -291,7 +292,9 @@ void RuntimeQML::fileChanged(const QString& path)
     // Deleted files are removed from the watcher, re-add the file for
     //  systems that delete files to update them
     if (m_fileWatcher)
-        m_fileWatcher->addPath(path);
+        QTimer::singleShot(500, m_fileWatcher, [this,path](){
+             m_fileWatcher->addPath(path);
+        });
 #endif
 }
 
