@@ -286,6 +286,13 @@ void RuntimeQML::fileChanged(const QString& path)
     if (!m_noDebug)
         qDebug() << "Reloading qml:" << path;
     reload();
+
+#if defined(Q_OS_WIN)
+    // Deleted files are removed from the watcher, re-add the file for
+    //  systems that delete files to update them
+    if (m_fileWatcher)
+        m_fileWatcher->addPath(path);
+#endif
 }
 
 
