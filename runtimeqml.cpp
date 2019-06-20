@@ -288,9 +288,10 @@ void RuntimeQML::fileChanged(const QString& path)
         qDebug() << "Reloading qml:" << path;
     reload();
 
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) || (defined(Q_OS_UNIX) && !defined(Q_OS_MACOS))
     // Deleted files are removed from the watcher, re-add the file for
     //  systems that delete files to update them
+    // Seems to happen on Windows and Linux
     if (m_fileWatcher)
         QTimer::singleShot(500, m_fileWatcher, [this,path](){
              m_fileWatcher->addPath(path);
