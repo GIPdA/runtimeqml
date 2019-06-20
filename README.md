@@ -1,7 +1,7 @@
 # Runtime QML for Qt
 
 **Written by**: *Benjamin Balga.*
-**Copyright**: ***2018***, *Benjamin Balga*, released under BSD license.
+**Copyright**: ***2019***, *Benjamin Balga*, released under BSD license.
 
 
 ## About
