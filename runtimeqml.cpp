@@ -253,13 +253,13 @@ void RuntimeQML::reloadQml()
                 QQuickWindow* w = qobject_cast<QQuickWindow*>(allWindows.at(i));
                 if (w) {
                     w->close();
-                    w->deleteLater();
+                    w->deleteLater(); // FIXME ? Causes type errors on Qt 5.13+
                 }
             }
         }
 
         m_window->close();
-        m_window->deleteLater();
+        m_window->deleteLater(); // FIXME ? Causes type errors on Qt 5.13+
     }
 
     m_engine->clearComponentCache();
