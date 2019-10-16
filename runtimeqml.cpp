@@ -253,17 +253,13 @@ void RuntimeQML::reloadQml()
                 QQuickWindow* w = qobject_cast<QQuickWindow*>(allWindows.at(i));
                 if (w) {
                     w->close();
-#if QT_VERSION < QT_VERSION_CHECK(5, 13, 0)
-                    w->deleteLater(); // FIXME ? prints annoying type error messages for some anchors bindings (only seen on Qt 5.13+)
-#endif
+                    w->deleteLater();
                 }
             }
         }
 
         m_window->close();
-#if QT_VERSION < QT_VERSION_CHECK(5, 13, 0)
-        m_window->deleteLater(); // FIXME ? prints annoying type error messages for some anchors bindings (only seen on Qt 5.13+)
-#endif
+        m_window->deleteLater();
     }
 
     m_engine->clearComponentCache();
