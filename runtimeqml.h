@@ -39,6 +39,7 @@ signals:
     void autoReloadChanged(bool autoReload);
     void qrcFilenameChanged(QString qrcFilename);
     void closeAllOnReloadChanged(bool closeAllOnReload);
+    void reloaded();
 
 public slots:
     void reload();

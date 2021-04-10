@@ -274,6 +274,8 @@ void RuntimeQML::reloadQml()
         if (w) m_window = w;
     }
 
+    emit reloaded();
+
 //    for (auto *o : m_engine->rootObjects()) {
 //        qDebug() << "> " << o;
 //    }
