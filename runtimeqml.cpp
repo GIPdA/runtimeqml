@@ -269,7 +269,8 @@ void RuntimeQML::reloadQml()
     // NOTE: QQmlApplicationEngine::rootObjects() isn't cleared, should it be?
 
     if (!m_engine->rootObjects().isEmpty()) {
-        QQuickWindow* w = qobject_cast<QQuickWindow*>(m_engine->rootObjects().last());
+        auto rootObjects { m_engine->rootObjects() };
+        QQuickWindow* w = qobject_cast<QQuickWindow*>(rootObjects.back());
         if (w) m_window = w;
     }
 
