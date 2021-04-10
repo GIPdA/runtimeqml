@@ -100,6 +100,15 @@ void RuntimeQML::noDebug()
     m_noDebug = true;
 }
 
+/*!
+ * \brief First load of the main QML file.
+ * Only call once, in your main() in place of the usual 'engine.load(url);'.
+ * Do not use @a reload(), it can lead to some issues with write-once properties.
+ */
+void RuntimeQML::load()
+{
+    m_engine->load(m_selector.select(qrcAbsolutePath() + "/" + m_mainQmlFilename));
+}
 
 /*!
  * \brief Reload the window.

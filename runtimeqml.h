@@ -35,6 +35,9 @@ public:
 
     void noDebug();
 
+    //! First load of the QML. Call in main(), only once.
+    void load();
+
 signals:
     void autoReloadChanged(bool autoReload);
     void qrcFilenameChanged(QString qrcFilename);

@@ -56,7 +56,7 @@ For the auto-reload feature:
 
 Then load the main QML file :
 
-	rt->reload();
+	rt->load(); // Only once in main(), use reload() for subsequent reloads.
     
 And you're all set!
 
