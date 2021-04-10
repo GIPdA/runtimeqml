@@ -1,9 +1,12 @@
 #include "runtimeqml.h"
 
-#include <QXmlStreamReader>
 #include <QFileInfo>
+#include <QLoggingCategory>
 #include <QRegExp>
 #include <QTimer>
+#include <QXmlStreamReader>
+
+static Q_LOGGING_CATEGORY(log, "RuntimeQML")
 
 /*!
  * \brief Construct a RuntimeQML object with a path to the qrc file.
@@ -250,9 +253,12 @@ void RuntimeQML::addSuffix(const QString &suffix)
 void RuntimeQML::reloadQml()
 {
     if (m_mainQmlFilename.isEmpty()) {
-        qWarning("No QML file specified.");
+        qCWarning(log, "Reloading: can't do, main QML file not specified.");
         return;
     }
+
+    if (!m_noDebug)
+        qCDebug(log, "Reloading...");
 
     if (m_window) {
         if (m_closeAllOnReload) {
@@ -297,7 +303,7 @@ void RuntimeQML::reloadQml()
 void RuntimeQML::fileChanged(const QString& path)
 {
     if (!m_noDebug)
-        qDebug() << "Reloading qml:" << path;
+        qCDebug(log) << "File changed:" << path;
     reload();
 
 #if defined(Q_OS_WIN) || (defined(Q_OS_UNIX) && !defined(Q_OS_MACOS))
@@ -324,7 +330,7 @@ void RuntimeQML::loadQrcFiles()
 
     QFile file(m_qrcFilename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning("Unable to open resource file '%s', RuntimeQML will not work! Error: %s",
+        qCWarning(log, "Unable to open resource file '%s', RuntimeQML will not work! Error: %s",
                  qPrintable(m_qrcFilename), qPrintable(file.errorString()));
         return;
     }
@@ -384,17 +390,17 @@ void RuntimeQML::loadQrcFiles()
     }
 
     if (!m_noDebug) {
-        qDebug("Watching QML files:");
+        qCDebug(log, "Watching QML files:");
         int const fileCount = m_fileWatcher->files().size();
 
         for (auto &f : m_fileWatcher->files()) {
-            qDebug() << "    " << f;
+            qCDebug(log) << "    " << f;
         }
 
         if (fileCount > 0)
-            qDebug("  Total: %d", fileCount);
+            qCDebug(log, "  Total: %d", fileCount);
         else
-            qDebug("  None.");
+            qCDebug(log, "  None.");
     }
 }
 
