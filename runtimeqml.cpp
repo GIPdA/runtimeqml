@@ -260,6 +260,12 @@ void RuntimeQML::reloadQml()
     if (!m_noDebug)
         qCDebug(log, "Reloading...");
 
+    if (!m_window) {
+        auto rootObjects { m_engine->rootObjects() };
+        if (!rootObjects.isEmpty())
+            m_window = qobject_cast<QQuickWindow*>(rootObjects.back());
+    }
+
     if (m_window) {
         if (m_closeAllOnReload) {
             // Find all child windows and close them
@@ -282,12 +288,6 @@ void RuntimeQML::reloadQml()
     // TODO: QString path to QUrl doesn't work under Windows with load() (load fail)
     m_engine->load(m_selector.select(qrcAbsolutePath() + "/" + m_mainQmlFilename));
     // NOTE: QQmlApplicationEngine::rootObjects() isn't cleared, should it be?
-
-    if (!m_engine->rootObjects().isEmpty()) {
-        auto rootObjects { m_engine->rootObjects() };
-        QQuickWindow* w = qobject_cast<QQuickWindow*>(rootObjects.back());
-        if (w) m_window = w;
-    }
 
     emit reloaded();
 
