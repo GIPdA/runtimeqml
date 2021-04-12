@@ -272,15 +272,14 @@ void RuntimeQML::reloadQml()
             auto const allWindows = m_window->findChildren<QQuickWindow*>();
             for (int i {0}; i < allWindows.size(); ++i) {
                 QQuickWindow* w = qobject_cast<QQuickWindow*>(allWindows.at(i));
-                if (w) {
+                if (w)
                     w->close();
-                    w->deleteLater(); // FIXME ? Causes type errors on Qt 5.13+
-                }
             }
         }
 
         m_window->close();
-        m_window->deleteLater(); // FIXME ? Causes type errors on Qt 5.13+
+        delete m_window; // Hopefully all goes well...
+        //m_window->deleteLater(); // FIXME ? Causes type errors on Qt 5.13+
     }
 
     m_engine->clearComponentCache();
