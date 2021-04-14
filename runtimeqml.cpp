@@ -279,6 +279,7 @@ void RuntimeQML::reloadQml()
 
         m_window->close();
         delete m_window; // Hopefully all goes well...
+        m_window = nullptr;
         //m_window->deleteLater(); // FIXME ? Causes type errors on Qt 5.13+
     }
 
