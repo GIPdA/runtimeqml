@@ -2,7 +2,7 @@
 
 #include <QFileInfo>
 #include <QLoggingCategory>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QTimer>
 #include <QXmlStreamReader>
 
@@ -353,7 +353,7 @@ void RuntimeQML::loadQrcFiles()
                         // Ignore this prefix, loop through elements in this 'qresource' tag
                         while (!inputStream.atEnd() && !inputStream.hasError()) {
                             inputStream.readNext();
-                            if (inputStream.isEndElement() && inputStream.name() == "qresource")
+                            if (inputStream.isEndElement() && inputStream.name().toString() == "qresource")
                                 break;
                         }
                         continue;
@@ -369,9 +369,8 @@ void RuntimeQML::loadQrcFiles()
                 // Check ignore list
                 QString const fullFilename { currentPrefix + filename };
                 auto it = std::find_if(m_fileIgnoreList.cbegin(), m_fileIgnoreList.cend(), [&](QString const& pattern) {
-                    QRegExp re(pattern);
-                    re.setPatternSyntax(QRegExp::WildcardUnix);
-                    return re.exactMatch(fullFilename);
+                    QRegularExpression re(QRegularExpression::wildcardToRegularExpression(pattern));
+                    return re.match(fullFilename).hasMatch();
                 });
 
                 if (it != m_fileIgnoreList.cend())
