@@ -1,13 +1,15 @@
 # Runtime QML for Qt
 
 **Written by**: *Benjamin Balga.*
-**Copyright**: ***2019***, *Benjamin Balga*, released under BSD license.
+**Copyright**: ***2022***, *Benjamin Balga*, released under BSD license.
+
+
+**Updated version**: This new version make use of an URL Interceptor to replace QRC files by those on the filesystem. This allows to load multiple QRC files, and even works on libraries!
 
 
 ## About
 
-This is a base project to get runtime QML reload in your Qt project.
-It allows you to reload all QML code at runtime, without recompiling or restarting your app, saving time.
+RuntimeQml allows to hot-reload QML files at runtime.
 
 With auto-reload, QML files are watched (based on the QRC file) and reloaded when you save them, or can trigger it manually.
 
@@ -27,36 +29,35 @@ Clone the repo into your project (or copy-paste the ```runtimeqml``` folder) and
 
 
 ### With Qbs
-The Qbs project file includes RuntimeQML as a static library. Check the example project to see how to include it in your project.
+Add a dependency to the RuntimeQml project. Check the example project to see how to include it in your project.
 
 
 ## Usage
 
-Include ```runtimeqml.h``` header file, and create the RuntimeQML object (after the QML engine) :
+Include ```runtimeqml.hpp``` header file, and create the RuntimeQml object (after the QML engine) :
 
-	RuntimeQML *rt = new RuntimeQML(&engine, QRC_SOURCE_PATH"/qml.qrc");
+	RuntimeQml *rt = new RuntimeQML(&engine);
+	rt->parseQrc(QRC_SOURCE_PATH "/qml.qrc");
 
-The second argument is the path to your qrc file listing all your QML files, needed for the auto-reload feature only. You can omit it if you don't want auto-reload.
+The second line parse the QRC file listing all your QML files, needed to link QRC paths with the filesystem. Multiple QRC files can be parsed.
+
 ```QRC_SOURCE_PATH``` is defined in the ```.pri/.qbs``` file to its parent path, just to not have to manually set an absolute path...
 
 
 Set the "options" you want, or not:
 
-	rt->noDebug(); // Removes debug prints
-	rt->setAutoReload(true); // Enable auto-reload (begin to watch files)
-	//rt->setCloseAllOnReload(false); // Don't close all windows on reload. Not advised!
-	rt->setMainQmlFilename("main.qml"); // This is the file that loaded on reload, default is "main.qml"
+	rt->setAutoReload(true); // Enable auto-reload
 
 For the auto-reload feature:
 
-	rt->addSuffix("conf"); // Adds a file suffix to the "white list" for watched files. "qml" is already in.
-    rt->ignorePrefix("/test"); // Ignore a prefix in the QRC file.
-    rt->ignoreFile("/Page2.qml"); // Ignore a file name with prefix (supports classic wildcard matching)
+	rt->addFileSuffixFilter("conf"); // Adds a file suffix to the "white list" for watched files. "qml" is already in.
+	rt->addQrcPrefixIgnoreFilter("noreload"); // Ignore a prefix from auto-reload.
+    rt->addIgnoreFilter("*NoReload.qml"); // Ignore some files from auto-reload. Supports glob wildcards.
 
 
-Then load the main QML file :
+Then load the main QML file as you would do with QQmlApplicationEngine :
 
-	rt->load(); // Only once in main(), use reload() for subsequent reloads.
+	rt->load(QStringLiteral("qrc:/qml/main.qml")); // Use reload() for subsequent reloads.
     
 And you're all set!
 
@@ -68,14 +69,14 @@ You can also check the test project. Beware, includes and defines differs a bit.
 
 Add the RuntimeQML object to the QML context:
 
-	engine.rootContext()->setContextProperty("RuntimeQML", rt);
+	engine.rootContext()->setContextProperty("RuntimeQml", rt);
 	
 Trigger the reload when and where you want, like with a button:
 
 	Button {
         text: "Reload"
         onClicked: {
-            RuntimeQML.reload();
+            RuntimeQml.reload();
         }
     }
 

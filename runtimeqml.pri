@@ -10,4 +10,4 @@ SOURCES += \
     $$PWD/runtimeqml.cpp
 
 HEADERS += \
-    $$PWD/runtimeqml.h
+    $$PWD/runtimeqml.hpp
