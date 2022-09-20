@@ -10,6 +10,8 @@
 #include <QQuickWindow>
 #include <QXmlStreamReader>
 
+#include <map>
+
 static Q_LOGGING_CATEGORY(log, "RuntimeQml")
 
 // From QRegularExpression, but matching path separators too.
@@ -97,7 +99,7 @@ class UrlInterceptor : public QQmlAbstractUrlInterceptor
 public:
     QUrl intercept(QUrl const& url, QQmlAbstractUrlInterceptor::DataType /*type*/) override final
     {
-        if (filesMap.contains(url))
+        if (filesMap.count(url) > 0)
             return filesMap[url];
         return url;
     }
@@ -108,7 +110,7 @@ public:
     }
 
 private:
-    QMap<QUrl,QUrl> filesMap;
+    std::map<QUrl,QUrl> filesMap;
 };
 
 
