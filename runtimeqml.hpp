@@ -16,8 +16,8 @@ public:
 
     void parseQrc(QString const& qrcFilename);
 
-    //! First load of the QML. Call in main(), only once.
     void load(QUrl const& url);
+    void setReloadUrl(QUrl const& url);
 
     //! Reload the main QML file.
     Q_INVOKABLE void reload();

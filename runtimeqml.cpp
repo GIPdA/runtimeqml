@@ -292,10 +292,18 @@ void RuntimeQml::parseQrc(QString const& qrcFilename)
 
 void RuntimeQml::load(QUrl const& url)
 //! Load the URL in the engine, and in the upcoming reloads.
+//! Call instead of engine.load(...), or use @a setReloadUrl.
+{
+    Q_D(RuntimeQml);
+    setReloadUrl(url);
+    d->engine->load(url);
+}
+
+void RuntimeQml::setReloadUrl(QUrl const& url)
+//! Sets the URL to load in the upcoming reloads.
 {
     Q_D(RuntimeQml);
     d->mainQmlFile = url;
-    d->engine->load(url);
 }
 
 void RuntimeQml::reload()
