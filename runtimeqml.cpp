@@ -97,7 +97,7 @@ static QString wildcardToRegularExpression(QStringView pattern)
 class UrlInterceptor : public QQmlAbstractUrlInterceptor
 {
 public:
-    QUrl intercept(QUrl const& url, QQmlAbstractUrlInterceptor::DataType /*type*/) override final
+    QUrl intercept(QUrl const& url, QQmlAbstractUrlInterceptor::DataType /*type*/) final
     {
         if (filesMap.count(url) > 0)
             return filesMap[url];
@@ -120,7 +120,6 @@ class RuntimeQmlPrivate
     Q_DECLARE_PUBLIC(RuntimeQml)
     RuntimeQml * const q_ptr {nullptr};
 
-public:
     RuntimeQmlPrivate(RuntimeQml* q, QQmlApplicationEngine* _engine) :
         q_ptr(q),
         engine(_engine)
@@ -166,13 +165,14 @@ public:
                 QString name { inputStream.name().toString() };
 
                 // Check prefix
-                if (name == "qresource") {
-                    if (inputStream.attributes().hasAttribute("prefix"))
-                        currentPrefix = inputStream.attributes().value("prefix").toString();
+                if (name == QStringLiteral("qresource")) {
+                    if (inputStream.attributes().hasAttribute(QStringLiteral("prefix")))
+                        currentPrefix = inputStream.attributes().value(QStringLiteral("prefix")).toString();
                 }
 
                 // Check file name
-                else if (name == "file" && ! currentPrefix.isEmpty()) {
+                else if (name == QStringLiteral("file") && ! currentPrefix.isEmpty()) {
+                    // TODO: use alias if defined?
                     QString const filename { inputStream.readElementText() };
                     QFileInfo const fileInfo { filename };
 
@@ -274,10 +274,10 @@ public:
 
 
 
-RuntimeQml::RuntimeQml(QQmlApplicationEngine* engine, QObject *parent) :
+RuntimeQml::RuntimeQml(QQmlApplicationEngine* engine, QObject* parent) :
     QObject(parent),
     dd_ptr(new RuntimeQmlPrivate(this, engine))
-  //! Ownership of @a engine is left to the caller.
+//! Ownership of @a engine is left to the caller.
 {}
 
 RuntimeQml::~RuntimeQml()
@@ -363,7 +363,7 @@ void RuntimeQml::addQrcPrefixIgnoreFilter(QString const& prefix)
 //! @brief Add a QRC prefix to ignore. Equivalent to addIgnoreFilter("qrc:/<prefix>") for a valid prefix.
 //! Must be called before load() and parseQrc().
 {
-    if ( (! prefix.isEmpty()) && (! prefix.startsWith("qrc:/")) && (prefix != "/"))
+    if ( (! prefix.isEmpty()) && (! prefix.startsWith(QStringLiteral("qrc:/"))) && (prefix != QStringLiteral("/")))
         addIgnoreFilter("qrc:/"+prefix);
 }
 

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <QObject>
-#include <QScopedPointer>
 #include <QQmlApplicationEngine>
+#include <QScopedPointer>
 
 class RuntimeQmlPrivate;
 class RuntimeQml : public QObject
@@ -11,7 +11,7 @@ class RuntimeQml : public QObject
     Q_PROPERTY(bool autoReload READ autoReload WRITE setAutoReload NOTIFY autoReloadChanged)
 
 public:
-    explicit RuntimeQml(QQmlApplicationEngine *engine, QObject *parent = nullptr);
+    explicit RuntimeQml(QQmlApplicationEngine* engine, QObject* parent = nullptr);
     ~RuntimeQml() override;
 
     void parseQrc(QString const& qrcFilename);
