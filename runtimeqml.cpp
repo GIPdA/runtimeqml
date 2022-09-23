@@ -97,6 +97,9 @@ static QString wildcardToRegularExpression(QStringView pattern)
 class UrlInterceptor : public QQmlAbstractUrlInterceptor
 {
 public:
+    UrlInterceptor() = default;
+    Q_DISABLE_COPY_MOVE(UrlInterceptor)
+
     QUrl intercept(QUrl const& url, QQmlAbstractUrlInterceptor::DataType /*type*/) final
     {
         if (filesMap.count(url) > 0)
