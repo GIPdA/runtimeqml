@@ -102,13 +102,21 @@ public:
 
     QUrl intercept(QUrl const& url, QQmlAbstractUrlInterceptor::DataType /*type*/) final
     {
-        if (filesMap.count(url) > 0)
+        /*QString const url_str = url.toString();
+        if ( ! url_str.startsWith(QStringLiteral("qrc")) || url_str.endsWith(QStringLiteral("qmldir")))
+            return url;
+        qCDebug(log, "Intercepting: %s", qPrintable(url_str));//*/
+
+        if (filesMap.count(url) > 0) {
+            //qCDebug(log, "Intercepted: %s to %s", qPrintable(url.toString()), qPrintable(filesMap[url].toString()));
             return filesMap[url];
+        }
         return url;
     }
 
     //! Intercepts 'source' to be replaced by 'target'
     void addUrlMap(QUrl const& source, QUrl const& target) {
+        //qCDebug(log, "Intercepting: %s to %s", qPrintable(source.toString()), qPrintable(target.toString()));
         filesMap[source] = target;
     }
 
@@ -231,7 +239,7 @@ class RuntimeQmlPrivate
             return;
         }
 
-        qCDebug(log, "Reloading...");
+        qCDebug(log, "Reloading.");
 
         QQuickWindow* rootWindow = [&]() -> QQuickWindow* {
             auto rootObjects { engine->rootObjects() };
@@ -260,6 +268,10 @@ class RuntimeQmlPrivate
         engine->load(mainQmlFile);
         //engine->load(m_selector.select(qrcAbsolutePath() + "/" + m_mainQmlFilename));
         // NOTE: QQmlApplicationEngine::rootObjects() isn't cleared, should it be?
+
+        if (engine->rootObjects().isEmpty()) {
+            qCWarning(log, "Reloading may have failed! (no root object)");
+        }
 
         emit q_ptr->reloaded();
     }
