@@ -166,8 +166,11 @@ class RuntimeQmlPrivate
 
                 // Check prefix
                 if (name == QStringLiteral("qresource")) {
-                    if (inputStream.attributes().hasAttribute(QStringLiteral("prefix")))
+                    if (inputStream.attributes().hasAttribute(QStringLiteral("prefix"))) {
                         currentPrefix = inputStream.attributes().value(QStringLiteral("prefix")).toString();
+                        if ( ! currentPrefix.endsWith('/'))
+                            currentPrefix += '/';
+                    }
                 }
 
                 // Check file name
@@ -183,7 +186,7 @@ class RuntimeQmlPrivate
                     QString const fullQrcFilename = selector.select( [&]() {
                         if (currentPrefix == '/')
                             return "qrc:/" + filename;
-                        return "qrc:" + currentPrefix + "/" + filename;
+                        return "qrc:" + currentPrefix + filename;
                     }() );
 
                     bool const toIgnore = std::find_if(fileIgnoreList.cbegin(), fileIgnoreList.cend(), [&](QString const& pattern) {
