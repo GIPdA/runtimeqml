@@ -324,6 +324,12 @@ void RuntimeQml::setReloadUrl(QUrl const& url)
     d->mainQmlFile = url;
 }
 
+QUrl const& RuntimeQml::reloadUrl() const
+{
+    Q_D(const RuntimeQml);
+    return d->mainQmlFile;
+}
+
 void RuntimeQml::reload()
 //! Trigger a reload on the next event loop.
 //! On reload, all windows are closed and the root object is deleted.
