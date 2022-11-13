@@ -4,10 +4,7 @@
 **Copyright**: ***2022***, *Benjamin Balga*, released under BSD license.
 
 
-**Updated version**: This new version make use of an URL Interceptor to replace QRC files by those on the filesystem. This allows to load multiple QRC files, and even works on libraries! BUT, only Qt 6.
-
-
-**Qt 5**: Use the commit tagged qt5 for Qt 5 compatibility.
+**Updated version**: This new version make use of an URL Interceptor to replace QRC files by those on the filesystem. This allows to load multiple QRC files, and even works on libraries! Supported in Qt 6, the feature is undocumented in Qt5 but should work.
 
 
 ## About
