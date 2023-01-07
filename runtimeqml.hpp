@@ -22,6 +22,7 @@ public:
 
     //! Reload the main QML file.
     Q_INVOKABLE void reload();
+    Q_INVOKABLE bool isReloading() const;
 
     bool autoReload() const;
     void setAutoReload(bool autoReload);

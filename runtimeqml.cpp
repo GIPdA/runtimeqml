@@ -14,6 +14,21 @@
 
 static Q_LOGGING_CATEGORY(log, "RuntimeQml")
 
+struct DeferTarget {};
+template <class Lambda>
+struct Defer {
+    ~Defer() { lambda(); }
+    Lambda lambda;
+};
+
+template <class Lambda>
+Defer<Lambda> operator << (DeferTarget, Lambda lambda) {
+    return { std::move(lambda) };
+}
+
+#define defer auto defer_ = DeferTarget() << [&]()
+
+
 // From QRegularExpression, but matching path separators too.
 static QString wildcardToRegularExpression(QStringView pattern)
 {
@@ -234,6 +249,11 @@ class RuntimeQmlPrivate
     void reloadQml()
     //! Close all windows, delete root item and load the main URL again.
     {
+        reloading = true;
+        defer {
+            reloading = false;
+        };
+
         if (mainQmlFile.isEmpty()) {
             qCWarning(log, "Can't reload: no file specified.");
             return;
@@ -288,6 +308,7 @@ class RuntimeQmlPrivate
     QList<QString> allowedSuffixList { "qml" };
 
     bool autoReload {false};
+    bool reloading {false};
 };
 
 
@@ -335,6 +356,12 @@ void RuntimeQml::reload()
 //! On reload, all windows are closed and the root object is deleted.
 {
     QMetaObject::invokeMethod(this, "reloadQml", Qt::QueuedConnection);
+}
+
+bool RuntimeQml::isReloading() const
+{
+    Q_D(const RuntimeQml);
+    return d->reloading;
 }
 
 
