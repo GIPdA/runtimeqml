@@ -231,17 +231,20 @@ class RuntimeQmlPrivate
         }
 
         { // Debug
-            qCDebug(log, "Watching QML files from '%s':", qPrintable(qrcFilename));
             qsizetype const fileCount = fileWatcher.files().size();
 
-            for (auto &f : fileWatcher.files()) {
-                qCDebug(log) << "    " << f;
+            if (fileCount == 0) {
+                qCDebug(log, "No files to watch from '%s'.", qPrintable(qrcFilename));
+            } else {
+                qCDebug(log, "Watching QML files from '%s':", qPrintable(qrcFilename));
+
+                for (auto &f : fileWatcher.files()) {
+                    if (f.startsWith(basePath))
+                        qCDebug(log) << "  " << f.mid(basePath.length());
+                }
             }
 
-            if (fileCount > 0)
-                qCDebug(log, "  Total: %lld", fileCount);
-            else
-                qCDebug(log, "  None.");
+            //qCDebug(log, "Total watched files across QRCs: %lld", fileCount);
         }
     }
 
