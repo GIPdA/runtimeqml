@@ -201,9 +201,13 @@ class RuntimeQmlPrivate
 
                 // Check file name
                 else if (name == QStringLiteral("file") && ! currentPrefix.isEmpty()) {
-                    // TODO: use alias if defined?
+                    // If an alias is set, use it as the resource name.
+                    // Filename may either be relative to the QRC file, or absolute (starts with '/').
+                    QString const alias { inputStream.attributes().value(QStringLiteral("alias")).toString() };
                     QString const filename { inputStream.readElementText() };
                     QFileInfo const fileInfo { filename };
+
+                    QString const resourceName = alias.isEmpty() ? filename : alias;
 
                     if ( ! allowedSuffixList.contains(fileInfo.suffix()))
                         continue;
@@ -211,8 +215,8 @@ class RuntimeQmlPrivate
                     // Check ignore list
                     QString const fullQrcFilename = selector.select( [&]() {
                         if (currentPrefix == '/')
-                            return "qrc:/" + filename;
-                        return "qrc:" + currentPrefix + filename;
+                            return "qrc:/" + resourceName;
+                        return "qrc:" + currentPrefix + resourceName;
                     }() );
 
                     bool const toIgnore = std::find_if(fileIgnoreList.cbegin(), fileIgnoreList.cend(), [&](QString const& pattern) {
@@ -221,8 +225,10 @@ class RuntimeQmlPrivate
                     }) != fileIgnoreList.cend();
 
                     // Add local file name to watcher, and map with QRC file name.
-                    QString const localFilename { selector.select(basePath + filename) };
+                    QString const localFilename { selector.select( filename.startsWith('/') ? filename : (basePath + filename) ) };
                     urlInterceptor.addUrlMap(fullQrcFilename, QUrl::fromLocalFile(localFilename));
+
+                    //qCDebug(log, "File to watch: %s - as %s", qPrintable(localFilename), qPrintable(fullQrcFilename));
 
                     if ( ! toIgnore)
                         fileWatcher.addPath(localFilename);
