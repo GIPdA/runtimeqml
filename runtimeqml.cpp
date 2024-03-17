@@ -150,6 +150,11 @@ class RuntimeQmlPrivate
         q_ptr(q),
         engine(_engine)
     {
+        // Reload timer to combine mutiple quasi-simultaneous file changes.
+        reloader.setInterval(200);
+        reloader.setSingleShot(true);
+        reloader.callOnTimeout(q, [this](){ reloadQml(); });
+
         // The URL interceptor is used to replace QRC files by filesystem files.
         engine->addUrlInterceptor(&urlInterceptor);
 
@@ -310,6 +315,7 @@ class RuntimeQmlPrivate
     QFileSystemWatcher fileWatcher;
     UrlInterceptor urlInterceptor;
     QFileSelector selector;
+    QTimer reloader;
 
     QUrl mainQmlFile; // File to reload.
 
@@ -364,7 +370,11 @@ void RuntimeQml::reload()
 //! Trigger a reload on the next event loop.
 //! On reload, all windows are closed and the root object is deleted.
 {
-    QMetaObject::invokeMethod(this, "reloadQml", Qt::QueuedConnection);
+    Q_D(RuntimeQml);
+    // The timer avoids multiple reloads when saving multiple files at once
+    if ( ! d->reloader.isActive())
+        d->reloader.start();
+    //QMetaObject::invokeMethod(this, "reloadQml", Qt::QueuedConnection);
 }
 
 bool RuntimeQml::isReloading() const
@@ -439,13 +449,4 @@ QList<QString> const& RuntimeQml::ignoreFiltersList() const
 {
     Q_D(const RuntimeQml);
     return d->fileIgnoreList;
-}
-
-
-
-void RuntimeQml::reloadQml()
-//! Internal QML reload, called from the event loop.
-{
-    Q_D(RuntimeQml);
-    d->reloadQml();
 }

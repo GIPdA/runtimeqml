@@ -39,9 +39,6 @@ signals:
     void autoReloadChanged(bool autoReload);
     void reloaded();
 
-private slots:
-    void reloadQml();
-
 private:
     Q_DECLARE_PRIVATE_D(dd_ptr, RuntimeQml)
     QScopedPointer<RuntimeQmlPrivate> dd_ptr;
