@@ -230,7 +230,8 @@ class RuntimeQmlPrivate
                     }) != fileIgnoreList.cend();
 
                     // Add local file name to watcher, and map with QRC file name.
-                    QString const localFilename { selector.select( filename.startsWith('/') ? filename : (basePath + filename) ) };
+                    QFileInfo const fi(filename);
+                    QString const localFilename { selector.select( fi.isAbsolute() ? filename : (basePath + filename) ) };
                     urlInterceptor.addUrlMap(fullQrcFilename, QUrl::fromLocalFile(localFilename));
 
                     //qCDebug(log, "File to watch: %s - as %s", qPrintable(localFilename), qPrintable(fullQrcFilename));
