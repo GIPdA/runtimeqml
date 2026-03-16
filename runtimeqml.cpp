@@ -265,8 +265,11 @@ class RuntimeQmlPrivate
     //! Close all windows, delete root item and load the main URL again.
     {
         reloading = true;
+        emit q_ptr->loadedChanged();
+
         defer {
             reloading = false;
+            emit q_ptr->loadedChanged();
         };
 
         if (mainQmlFile.isEmpty()) {
@@ -373,8 +376,12 @@ void RuntimeQml::reload()
 {
     Q_D(RuntimeQml);
     // The timer avoids multiple reloads when saving multiple files at once
-    if ( ! d->reloader.isActive())
+    if ( ! d->reloader.isActive()) {
+        d->reloading = true;
+        emit loadedChanged();
+
         d->reloader.start();
+    }
     //QMetaObject::invokeMethod(this, "reloadQml", Qt::QueuedConnection);
 }
 
@@ -405,6 +412,11 @@ void RuntimeQml::setAutoReload(bool autoReload)
     emit autoReloadChanged(autoReload);
 }
 
+bool RuntimeQml::loaded() const
+{
+    Q_D(const RuntimeQml);
+    return ! d->reloading;
+}
 
 void RuntimeQml::addFileSuffixFilter(QString const& suffix)
 //! @brief Allow a file suffix to be considered in QRC files (e.g. "qml" for *.qml files).

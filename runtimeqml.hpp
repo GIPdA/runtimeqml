@@ -9,6 +9,7 @@ class RuntimeQml : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool autoReload READ autoReload WRITE setAutoReload NOTIFY autoReloadChanged)
+    Q_PROPERTY(bool loaded READ loaded NOTIFY loadedChanged FINAL)
 
 public:
     explicit RuntimeQml(QQmlApplicationEngine* engine, QObject* parent = nullptr);
@@ -27,6 +28,8 @@ public:
     bool autoReload() const;
     void setAutoReload(bool autoReload);
 
+    bool loaded() const;
+
     void addFileSuffixFilter(QString const& suffix);
     QList<QString> const& allowedSuffixes() const;
 
@@ -37,6 +40,7 @@ public:
 
 signals:
     void autoReloadChanged(bool autoReload);
+    void loadedChanged();
     void reloaded();
 
 private:
