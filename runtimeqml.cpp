@@ -273,7 +273,7 @@ class RuntimeQmlPrivate
         };
 
         if (mainQmlFile.isEmpty()) {
-            qCWarning(log, "Can't reload: no file specified.");
+            qCWarning(log, "Can't reload: no main file url specified.");
             return;
         }
 
